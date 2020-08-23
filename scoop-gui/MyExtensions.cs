@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace scoop_gui
+namespace ScoopGui
 {
     public static class MyExtensions
     {

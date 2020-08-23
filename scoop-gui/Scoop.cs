@@ -1,11 +1,11 @@
-﻿using scoop_gui.Models;
+﻿using ScoopGui.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace scoop_gui
+namespace ScoopGui
 {
     public static class Scoop
     {
@@ -58,13 +58,22 @@ namespace scoop_gui
             }
         }
 
-        public static async Task<List<ScoopApp>> ListAsync()
+        public static async Task<List<ScoopApp>> List()
         {
             var result = await RunAsync("list");
 
-            result += "";
+            var lines = result.Split("\n");
 
             var list = new List<ScoopApp>();
+
+            foreach (string line in lines)
+            {
+                var trimmed = line.Trim();
+                if (trimmed == "Installed apps:" || trimmed == "")
+                    continue;
+
+                list.Add(new ScoopApp { name = trimmed });
+            }
 
             return list;
         }

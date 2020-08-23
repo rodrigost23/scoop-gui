@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
-    <RootNamespace>scoop_gui</RootNamespace>
+    <RootNamespace>ScoopGui</RootNamespace>
 
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>AnyCPU;x86;x64</Platforms>
