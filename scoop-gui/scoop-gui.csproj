@@ -22,7 +22,14 @@
   <ItemGroup>
     <None Remove="App.xaml" />
     <None Remove="AppsListPage.xaml" />
+    <None Remove="BrowsePage.xaml" />
     <None Remove="MainWindow.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="BrowsePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

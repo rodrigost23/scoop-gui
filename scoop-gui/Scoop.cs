@@ -19,7 +19,7 @@ namespace ScoopGui
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden,
                 RedirectStandardOutput = true,
-                WorkingDirectory = System.IO.Directory.GetCurrentDirectory(),
+                WorkingDirectory = Directory.GetCurrentDirectory(),
                 UseShellExecute = false
             };
 
@@ -30,7 +30,7 @@ namespace ScoopGui
             return processStartInfo;
         }
 
-        public static async Task<string> RunAsync(string arguments)
+        public static async Task<List<string>> RunAsync(string arguments)
         {
             try
             {
@@ -39,14 +39,21 @@ namespace ScoopGui
                     p.StartInfo = Info(arguments);
 
                     var writer = new StreamWriter(stream);
-                    await writer.WriteLineAsync("scoop {arguments}");
+                    await writer.WriteLineAsync($"scoop {arguments}");
 
                     p.Start();
-                    p.WaitForExit();
 
-                    var result = p.StandardOutput.ReadToEnd();
+                    var result = new List<string>();
 
-                    await writer.WriteLineAsync(result);
+                    while (!p.StandardOutput.EndOfStream)
+                    {
+                        var line = await p.StandardOutput.ReadLineAsync();
+                        await writer.WriteLineAsync(line);
+
+                        result.Add(line);
+                    }
+
+                    await p.WaitForExitAsync();
 
                     return result;
                 }
@@ -60,9 +67,25 @@ namespace ScoopGui
 
         public static async Task<List<ScoopApp>> List()
         {
-            var result = await RunAsync("list");
+            var lines = await RunAsync("list");
 
-            var lines = result.Split("\n");
+            var list = new List<ScoopApp>();
+
+            foreach (string line in lines)
+            {
+                var trimmed = line.Trim();
+                if (trimmed == "Installed apps:" || trimmed == "")
+                    continue;
+
+                list.Add(new ScoopApp { name = trimmed });
+            }
+
+            return list;
+        }
+
+        public static async Task<List<ScoopApp>> Search(string query = null)
+        {
+            var lines = await RunAsync("search" + (query ?? ""));
 
             var list = new List<ScoopApp>();
 
