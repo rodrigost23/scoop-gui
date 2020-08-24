@@ -15,23 +15,16 @@ namespace ScoopGui
     {
         public string AppTitleText => "Scoop";
 
-        public ObservableCollection<ScoopApp> appsList = new ObservableCollection<ScoopApp>();
-
         public MainWindow()
         {
             InitializeComponent();
+
+            ContentFrame.Navigate(typeof(AppsListPage));
 
             ScoopStreamReader.Read((line) => {
                 // TODO: Print to a text box instead
                 System.Diagnostics.Debug.Print(line);
             });
-        }
-
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            var list = await Scoop.List();
-            appsList.Clear();
-            appsList.AddAll(list);
         }
     }
 }
