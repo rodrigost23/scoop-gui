@@ -57,8 +57,16 @@ namespace ScoopGui
         {
             IsLoading.Value = true;
             appsList.Clear();
-            var list = await Task.Run(() => Scoop.Search());
-            appsList.AddAll(list);
+
+            await Task.Run(async () =>
+            {
+                await foreach (var item in Scoop.Search())
+                {
+                    // Run in UI Thread
+                    DispatcherQueue.TryEnqueue(() => appsList.Add(item));
+                }
+            });
+
             IsLoading.Value = false;
         }
     }

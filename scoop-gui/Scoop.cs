@@ -53,36 +53,28 @@ namespace ScoopGui
                 }
         }
 
-        public static async Task<List<ScoopApp>> List()
+        public static async IAsyncEnumerable<ScoopApp> List()
         {
-            var list = new List<ScoopApp>();
-
             await foreach (string line in RunAsync("list"))
             {
                 var trimmed = line.Trim();
                 if (trimmed == "Installed apps:" || trimmed == "")
                     continue;
 
-                list.Add(new ScoopApp { name = trimmed });
+                yield return new ScoopApp { name = trimmed };
             }
-
-            return list;
         }
 
-        public static async Task<List<ScoopApp>> Search(string query = null)
+        public static async IAsyncEnumerable<ScoopApp> Search(string query = null)
         {
-            var list = new List<ScoopApp>();
-
             await foreach (string line in RunAsync("search" + (query ?? "")))
             {
                 var trimmed = line.Trim();
                 if (trimmed == "Installed apps:" || trimmed == "")
                     continue;
 
-                list.Add(new ScoopApp { name = trimmed });
+                yield return new ScoopApp { name = trimmed };
             }
-
-            return list;
         }
     }
 }

@@ -17,6 +17,7 @@ using ScoopGui.Models;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using ScoopGui.Util;
+using Windows.UI.Core;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -41,8 +42,16 @@ namespace ScoopGui
         {
             IsLoading.Value = true;
             appsList.Clear();
-            var list = await Task.Run(() => Scoop.List());
-            appsList.AddAll(list);
+
+            await Task.Run(async () =>
+            {
+                await foreach (var item in Scoop.List())
+                {
+                    // Run in UI Thread
+                    DispatcherQueue.TryEnqueue(() => appsList.Add(item));
+                }
+            });
+
             IsLoading.Value = false;
         }
     }
