@@ -34,9 +34,14 @@ namespace ScoopGui
             ScoopStreamReader.Read((line) =>
             {
                 // TODO: Print to a text box instead
-                System.Diagnostics.Debug.Print(line);
+                CommandPeek.Text = line;
             });
         }
+
+        //~MainWindow()
+        //{
+        //    ScoopStreamReader.Stop();
+        //}
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)
         {

@@ -16,6 +16,7 @@ using System.Collections.ObjectModel;
 using ScoopGui.Models;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using ScoopGui.Util;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -25,28 +26,24 @@ namespace ScoopGui
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class AppsListPage : Page, INotifyPropertyChanged
+    public sealed partial class AppsListPage : Page
     {
         public ObservableCollection<ScoopApp> appsList = new ObservableCollection<ScoopApp>();
 
-        public bool isLoading = true;
+        public ObservableObject<bool> IsLoading { get; set; } = false;
 
         public AppsListPage()
         {
             InitializeComponent();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            isLoading = true;
-            //Bindings.Update();
+            IsLoading = true;
             appsList.Clear();
             var list = await Task.Run(() => Scoop.List());
             appsList.AddAll(list);
-            isLoading = false;
-            //Bindings.Update();
+            IsLoading = false;
         }
     }
 }

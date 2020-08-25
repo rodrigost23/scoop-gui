@@ -11,25 +11,7 @@
     Loaded="Page_Loaded">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <CommandBar DefaultLabelPosition="Right">
-            <AppBarButton Icon="Delete" Label="Uninstall"/>
-            <AppBarButton Icon="Up" Label="Update"/>
-
-            <CommandBar.SecondaryCommands>
-                <AppBarButton Label="Example"/>
-            </CommandBar.SecondaryCommands>
-
-            <CommandBar.Content>
-                <TextBlock Text="Installed Apps" Margin="12,14"/>
-            </CommandBar.Content>
-        </CommandBar>
-
-        <ListView ItemsSource="{x:Bind appsList}" Grid.Row="1">
+        <ListView ItemsSource="{x:Bind appsList}">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="models:ScoopApp">
                     <ListViewItem>
@@ -39,6 +21,6 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <ProgressRing IsActive="{x:Bind isLoading, Mode=OneWay}" Grid.Row="1" Width="48" Height="48"></ProgressRing>
+        <ProgressRing IsActive="{x:Bind IsLoading, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
     </Grid>
 </Page>

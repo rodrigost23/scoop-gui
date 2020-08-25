@@ -1,6 +1,8 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 using ScoopGui.Models;
+using ScoopGui.Util;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,15 +16,11 @@ namespace ScoopGui
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class BrowsePage : Page, INotifyPropertyChanged
+    public sealed partial class BrowsePage : Page
     {
         public ObservableCollection<ScoopApp> appsList = new ObservableCollection<ScoopApp>();
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public bool IsLoading { get; set; } = false;
-
-        public bool IsNotLoading => !IsLoading;
+        public ObservableObject<bool> IsLoading { get; set; } = false;
 
         public BrowsePage()
         {
@@ -48,6 +46,16 @@ namespace ScoopGui
             appsList.AddAll(list);
             IsLoading = false;
             Bindings.Update();
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
         }
     }
 }
