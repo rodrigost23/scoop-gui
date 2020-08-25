@@ -30,7 +30,7 @@ namespace ScoopGui
     {
         public ObservableCollection<ScoopApp> appsList = new ObservableCollection<ScoopApp>();
 
-        public ObservableObject<bool> IsLoading { get; set; } = false;
+        public ObservableObject<bool> IsLoading { get; } = false;
 
         public AppsListPage()
         {
@@ -39,11 +39,11 @@ namespace ScoopGui
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            IsLoading = true;
+            IsLoading.Value = true;
             appsList.Clear();
             var list = await Task.Run(() => Scoop.List());
             appsList.AddAll(list);
-            IsLoading = false;
+            IsLoading.Value = false;
         }
     }
 }

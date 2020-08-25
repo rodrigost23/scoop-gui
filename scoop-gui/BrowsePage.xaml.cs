@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml.Navigation;
 using ScoopGui.Models;
 using ScoopGui.Util;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -13,18 +14,33 @@ using System.Threading.Tasks;
 
 namespace ScoopGui
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class BrowsePage : Page
+    public sealed partial class BrowsePage : BasePage
     {
         public ObservableCollection<ScoopApp> appsList = new ObservableCollection<ScoopApp>();
 
-        public ObservableObject<bool> IsLoading { get; set; } = false;
+        public ObservableObject<bool> IsLoading { get; } = false;
+
+        protected override CommandList MenuItems => _menuItems;
+
+        private CommandList _menuItems = new CommandList{
+            new AppBarButton
+            {
+                Tag = "Refresh",
+                Icon = new SymbolIcon(Symbol.Refresh),
+                Label = "Refresh",
+                DynamicOverflowOrder = 1
+            }
+        };
 
         public BrowsePage()
         {
             InitializeComponent();
+
+            if (MenuItems["Refresh"] is AppBarButton button)
+            {
+                button.Click += Refresh_Click;
+                IsLoading.PropertyChanged += (sender, args) => button.IsEnabled = !IsLoading;
+            }
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -39,23 +55,11 @@ namespace ScoopGui
 
         private async Task RefreshData()
         {
-            IsLoading = true;
-            Bindings.Update();
+            IsLoading.Value = true;
             appsList.Clear();
             var list = await Task.Run(() => Scoop.Search());
             appsList.AddAll(list);
-            IsLoading = false;
-            Bindings.Update();
-        }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            base.OnNavigatedFrom(e);
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
+            IsLoading.Value = false;
         }
     }
 }

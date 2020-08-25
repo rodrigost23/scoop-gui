@@ -40,8 +40,6 @@
                 <Frame x:Name="ContentFrame" IsTabStop="True" Grid.Row="0"/>
 
                 <CommandBar x:Name="MainCommandBar" DefaultLabelPosition="Right" Grid.Row="1">
-                    <AppBarButton Icon="Delete" Label="Uninstall"/>
-                    <AppBarButton x:Name="RefreshCommand" Icon="Refresh" Label="Update" IsEnabled="false"/>
                     <AppBarButton Label="See commands" LabelPosition="Collapsed">
                         <AppBarButton.Icon>
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE76C;"/>

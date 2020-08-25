@@ -8,6 +8,7 @@
     xmlns:models="using:ScoopGui.Models"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    NavigationCacheMode="Enabled"
     Loaded="Page_Loaded">
 
     <Grid>
@@ -21,6 +22,6 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <ProgressRing IsActive="{x:Bind IsLoading, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
+        <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
     </Grid>
 </Page>

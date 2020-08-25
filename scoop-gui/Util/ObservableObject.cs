@@ -26,12 +26,11 @@ namespace ScoopGui.Util
         public T Value
         {
             get => objValue;
-            set => Set(value);
-        }
-
-        public void Set(T value) {
-            objValue = value;
-            NotifyPropertyChanged();
+            set
+            {
+                objValue = value;
+                NotifyPropertyChanged("Value");
+            }
         }
 
         public static implicit operator T(ObservableObject<T> obj) => obj.Value;

@@ -1,4 +1,4 @@
-﻿<Page
+﻿<local:BasePage
     x:Class="ScoopGui.BrowsePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,6 +8,7 @@
     xmlns:models="using:ScoopGui.Models"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    NavigationCacheMode="Enabled"
     Loaded="Page_Loaded">
 
     <Grid>
@@ -21,6 +22,6 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <ProgressRing IsActive="{x:Bind IsLoading, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
+        <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
     </Grid>
-</Page>
+</local:BasePage>
