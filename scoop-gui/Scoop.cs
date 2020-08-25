@@ -30,10 +30,8 @@ namespace ScoopGui
             return processStartInfo;
         }
 
-        public static async Task<List<string>> RunAsync(string arguments)
+        public static async IAsyncEnumerable<string> RunAsync(string arguments)
         {
-            try
-            {
                 using (Process p = new Process())
                 {
                     p.StartInfo = Info(arguments);
@@ -43,35 +41,23 @@ namespace ScoopGui
 
                     p.Start();
 
-                    var result = new List<string>();
-
                     while (!p.StandardOutput.EndOfStream)
                     {
                         var line = await p.StandardOutput.ReadLineAsync();
                         await writer.WriteLineAsync(line);
 
-                        result.Add(line);
+                        yield return line;
                     }
 
                     await p.WaitForExitAsync();
-
-                    return result;
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return null;
-            }
         }
 
         public static async Task<List<ScoopApp>> List()
         {
-            var lines = await RunAsync("list");
-
             var list = new List<ScoopApp>();
 
-            foreach (string line in lines)
+            await foreach (string line in RunAsync("list"))
             {
                 var trimmed = line.Trim();
                 if (trimmed == "Installed apps:" || trimmed == "")
@@ -85,11 +71,9 @@ namespace ScoopGui
 
         public static async Task<List<ScoopApp>> Search(string query = null)
         {
-            var lines = await RunAsync("search" + (query ?? ""));
-
             var list = new List<ScoopApp>();
 
-            foreach (string line in lines)
+            await foreach (string line in RunAsync("search" + (query ?? "")))
             {
                 var trimmed = line.Trim();
                 if (trimmed == "Installed apps:" || trimmed == "")
