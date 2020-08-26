@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ScoopGui
@@ -32,36 +33,45 @@ namespace ScoopGui
 
         public static async IAsyncEnumerable<string> RunAsync(string arguments)
         {
-                using (Process p = new Process())
+            using (Process p = new Process())
+            {
+                p.StartInfo = Info(arguments);
+
+                var writer = new StreamWriter(stream);
+                await writer.WriteLineAsync($"scoop {arguments}");
+
+                p.Start();
+
+                while (!p.StandardOutput.EndOfStream)
                 {
-                    p.StartInfo = Info(arguments);
+                    var line = await p.StandardOutput.ReadLineAsync();
+                    await writer.WriteLineAsync(line);
 
-                    var writer = new StreamWriter(stream);
-                    await writer.WriteLineAsync($"scoop {arguments}");
-
-                    p.Start();
-
-                    while (!p.StandardOutput.EndOfStream)
-                    {
-                        var line = await p.StandardOutput.ReadLineAsync();
-                        await writer.WriteLineAsync(line);
-
-                        yield return line;
-                    }
-
-                    await p.WaitForExitAsync();
+                    yield return line;
                 }
+
+                await p.WaitForExitAsync();
+            }
         }
 
         public static async IAsyncEnumerable<ScoopApp> List()
         {
+            string pattern = @"^(?<name>[\w\-]+)(?:\s+(?<version>[\w\.\-]+))?(?:\s+\[(?<bucket>.+)\])?(?:\s+(?<failed>\*failed\*))?$";
             await foreach (string line in RunAsync("list"))
             {
                 var trimmed = line.Trim();
                 if (trimmed == "Installed apps:" || trimmed == "")
                     continue;
 
-                yield return new ScoopApp { name = trimmed };
+                var groups = Regex.Match(trimmed, pattern).Groups;
+
+                yield return new ScoopApp(name: groups["name"].Value)
+                {
+                    IsInstalled = true,
+                    Version = groups["version"].Value,
+                    Bucket = new ScoopBucket(groups["bucket"].Value),
+                    IsFailed = groups["failed"].Value != ""
+                };
             }
         }
 
@@ -73,7 +83,7 @@ namespace ScoopGui
                 if (trimmed == "Installed apps:" || trimmed == "")
                     continue;
 
-                yield return new ScoopApp { name = trimmed };
+                yield return new ScoopApp(name: trimmed);
             }
         }
     }

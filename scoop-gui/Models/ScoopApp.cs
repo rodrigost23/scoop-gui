@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,19 @@ namespace ScoopGui.Models
 {
     public class ScoopApp
     {
-        public string name { get; set; }
+        public string Name { get; set; }
 
-        public string version { get; set; }
+        public string? Version { get; set; }
+
+        public ScoopBucket? Bucket { get; set; }
+
+        public bool? IsInstalled { get; set; }
+
+        public bool IsFailed { get; set; } = false;
+
+        public ScoopApp(string name)
+        {
+            Name = name;
+        }
     }
 }

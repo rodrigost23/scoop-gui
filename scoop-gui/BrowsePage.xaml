@@ -16,7 +16,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="models:ScoopApp">
                     <ListViewItem>
-                        <TextBlock Text="{x:Bind name, Mode=OneWay}"></TextBlock>
+                        <TextBlock Text="{x:Bind Name, Mode=OneWay}"></TextBlock>
                     </ListViewItem>
                 </DataTemplate>
             </ListView.ItemTemplate>

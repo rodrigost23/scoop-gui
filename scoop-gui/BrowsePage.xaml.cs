@@ -45,7 +45,10 @@ namespace ScoopGui
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            await RefreshData();
+            if (appsList.Count == 0 && !IsLoading)
+            {
+                await RefreshData();
+            }
         }
 
         private async void Refresh_Click(object sender, RoutedEventArgs e)
