@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.UI.Core;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -36,7 +37,10 @@ namespace ScoopGui
             ScoopStreamReader.Read((line) =>
             {
                 // TODO: Print to a text box instead
-                CommandPeek.Text = line;
+                _ = DispatcherQueue.TryEnqueue(() =>
+                    {
+                        CommandPeek.Text = line;
+                    });
             });
         }
 
