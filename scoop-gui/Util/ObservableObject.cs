@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScoopGui.Util
 {
@@ -12,7 +7,8 @@ namespace ScoopGui.Util
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ObservableObject(T value) {
+        public ObservableObject(T value)
+        {
             Value = value;
         }
 
@@ -29,11 +25,11 @@ namespace ScoopGui.Util
             set
             {
                 objValue = value;
-                NotifyPropertyChanged("Value");
+                NotifyPropertyChanged(nameof(Value));
             }
         }
 
         public static implicit operator T(ObservableObject<T> obj) => obj.Value;
-        public static implicit operator ObservableObject<T>(T value) => new ObservableObject<T>(value);
+        public static implicit operator ObservableObject<T>(T value) => new(value);
     }
 }

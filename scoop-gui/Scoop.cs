@@ -1,10 +1,8 @@
 ﻿using ScoopGui.Models;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ScoopGui
 {
@@ -14,7 +12,7 @@ namespace ScoopGui
 
         private static ProcessStartInfo Info(string arguments = null)
         {
-            ProcessStartInfo processStartInfo = new ProcessStartInfo
+            ProcessStartInfo processStartInfo = new()
             {
                 FileName = @"powershell.exe",
                 CreateNoWindow = true,
@@ -33,25 +31,24 @@ namespace ScoopGui
 
         public static async IAsyncEnumerable<string> RunAsync(string arguments)
         {
-            using (Process p = new Process())
+            using Process p = new();
+
+            p.StartInfo = Info(arguments);
+
+            StreamWriter writer = new(stream);
+            await writer.WriteLineAsync($"scoop {arguments}");
+
+            _ = p.Start();
+
+            while (!p.StandardOutput.EndOfStream)
             {
-                p.StartInfo = Info(arguments);
+                string line = await p.StandardOutput.ReadLineAsync();
+                await writer.WriteLineAsync(line);
 
-                var writer = new StreamWriter(stream);
-                await writer.WriteLineAsync($"scoop {arguments}");
-
-                p.Start();
-
-                while (!p.StandardOutput.EndOfStream)
-                {
-                    var line = await p.StandardOutput.ReadLineAsync();
-                    await writer.WriteLineAsync(line);
-
-                    yield return line;
-                }
-
-                await p.WaitForExitAsync();
+                yield return line;
             }
+
+            await p.WaitForExitAsync();
         }
 
         public static async IAsyncEnumerable<ScoopApp> List()
@@ -59,11 +56,13 @@ namespace ScoopGui
             string pattern = @"^(?<name>[\w\-]+)(?:\s+(?<version>[\w\.\-]+))?(?:\s+\[(?<bucket>.+)\])?(?:\s+(?<failed>\*failed\*))?$";
             await foreach (string line in RunAsync("list"))
             {
-                var trimmed = line.Trim();
-                if (trimmed == "Installed apps:" || trimmed == "")
+                string trimmed = line.Trim();
+                if (trimmed is "Installed apps:" or "")
+                {
                     continue;
+                }
 
-                var groups = Regex.Match(trimmed, pattern).Groups;
+                GroupCollection groups = Regex.Match(trimmed, pattern).Groups;
 
                 yield return new ScoopApp(name: groups["name"].Value)
                 {
@@ -79,9 +78,11 @@ namespace ScoopGui
         {
             await foreach (string line in RunAsync("search" + (query ?? "")))
             {
-                var trimmed = line.Trim();
-                if (trimmed == "Installed apps:" || trimmed == "")
+                string trimmed = line.Trim();
+                if (trimmed is "Installed apps:" or "")
+                {
                     continue;
+                }
 
                 yield return new ScoopApp(name: trimmed);
             }

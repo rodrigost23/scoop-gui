@@ -1,12 +1,8 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Navigation;
 using ScoopGui.Models;
 using ScoopGui.Util;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -16,13 +12,14 @@ namespace ScoopGui
 {
     public sealed partial class BrowsePage : BasePage
     {
-        public ObservableCollection<ScoopApp> appsList = new ObservableCollection<ScoopApp>();
+        public ObservableCollection<ScoopApp> appsList = new();
 
         public ObservableObject<bool> IsLoading { get; } = false;
 
         protected override CommandList MenuItems => _menuItems;
 
-        private CommandList _menuItems = new CommandList{
+        private readonly CommandList _menuItems = new()
+        {
             new AppBarButton
             {
                 Tag = "Refresh",
@@ -63,10 +60,10 @@ namespace ScoopGui
 
             await Task.Run(async () =>
             {
-                await foreach (var item in Scoop.Search())
+                await foreach (ScoopApp item in Scoop.Search())
                 {
                     // Run in UI Thread
-                    DispatcherQueue.TryEnqueue(() => appsList.Add(item));
+                    _ = DispatcherQueue.TryEnqueue(() => appsList.Add(item));
                 }
             });
 

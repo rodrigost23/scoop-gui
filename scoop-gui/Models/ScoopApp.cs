@@ -1,9 +1,4 @@
 ﻿#nullable enable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScoopGui.Models
 {
@@ -17,7 +12,7 @@ namespace ScoopGui.Models
 
         public bool? IsInstalled { get; set; }
 
-        public bool IsFailed { get; set; } = false;
+        public bool IsFailed { get; set; }
 
         public ScoopApp(string name)
         {

@@ -1,23 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using System.Collections.ObjectModel;
 using ScoopGui.Models;
-using System.Threading.Tasks;
-using System.ComponentModel;
 using ScoopGui.Util;
-using Windows.UI.Core;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -29,12 +15,13 @@ namespace ScoopGui
     /// </summary>
     public sealed partial class AppsListPage : BasePage
     {
-        public ObservableCollection<ScoopApp> appsList = new ObservableCollection<ScoopApp>();
+        public ObservableCollection<ScoopApp> appsList = new();
 
         public ObservableObject<bool> IsLoading { get; } = false;
         protected override CommandList MenuItems => _menuItems;
 
-        private CommandList _menuItems = new CommandList{
+        private readonly CommandList _menuItems = new()
+        {
             new AppBarButton
             {
                 Tag = "Refresh",
@@ -75,10 +62,10 @@ namespace ScoopGui
 
             await Task.Run(async () =>
             {
-                await foreach (var item in Scoop.List())
+                await foreach (ScoopApp item in Scoop.List())
                 {
                     // Run in UI Thread
-                    DispatcherQueue.TryEnqueue(() => appsList.Add(item));
+                    _ = DispatcherQueue.TryEnqueue(() => appsList.Add(item));
                 }
             });
 

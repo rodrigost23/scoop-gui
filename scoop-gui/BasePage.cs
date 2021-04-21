@@ -2,18 +2,12 @@
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using ScoopGui.Util;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScoopGui
 {
     public abstract class BasePage : Page
     {
-        private App _app = Application.Current as App;
+        private readonly App _app = Application.Current as App;
 
         protected abstract CommandList MenuItems { get; }
 

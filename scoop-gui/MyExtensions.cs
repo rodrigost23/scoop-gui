@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace ScoopGui
 {
@@ -23,7 +22,7 @@ namespace ScoopGui
         /// <param name="newItems">The enumerable from which to get the items to add</param>
         public static void InsertAll<T>(this IList<T> list, int index, IEnumerable<T> newItems)
         {
-            var i = index;
+            int i = index;
             foreach (T item in newItems)
             {
                 list.Insert(i++, item);
@@ -38,7 +37,7 @@ namespace ScoopGui
         {
             foreach (T item in items)
             {
-                collection.Remove(item);
+                _ = collection.Remove(item);
             }
         }
     }

@@ -1,12 +1,8 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Input;
-using ScoopGui.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using Windows.UI.Core;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -18,12 +14,12 @@ namespace ScoopGui
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-        public string AppTitleText => "Scoop";
+        public static string AppTitleText => "Scoop";
 
         public CommandBar CommandBar => MainCommandBar;
 
         // List of ValueTuple holding the Navigation Tag and the relative Navigation Page
-        private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
+        private readonly List<(string Tag, Type Page)> _pages = new()
         {
             ("installed", typeof(AppsListPage)),
             ("browse", typeof(BrowsePage)),
@@ -75,13 +71,13 @@ namespace ScoopGui
         private void NavView_SelectionChanged(NavigationView sender,
                                               NavigationViewSelectionChangedEventArgs args)
         {
-            if (args.IsSettingsSelected == true)
+            if (args.IsSettingsSelected)
             {
                 NavView_Navigate("settings", args.RecommendedNavigationTransitionInfo);
             }
             else if (args.SelectedItemContainer != null && args.SelectedItemContainer.Tag != null)
             {
-                var navItemTag = args.SelectedItemContainer.Tag.ToString();
+                string navItemTag = args.SelectedItemContainer.Tag.ToString();
                 NavView_Navigate(navItemTag, args.RecommendedNavigationTransitionInfo);
             }
         }
@@ -97,17 +93,17 @@ namespace ScoopGui
             }
             else
             {
-                var item = _pages.FirstOrDefault(p => p.Tag.Equals(navItemTag));
+                (string Tag, Type Page) item = _pages.FirstOrDefault(p => p.Tag.Equals(navItemTag, StringComparison.Ordinal));
                 _page = item.Page;
             }
             // Get the page type before navigation so you can prevent duplicate
             // entries in the backstack.
-            var preNavPageType = ContentFrame.CurrentSourcePageType;
+            Type preNavPageType = ContentFrame.CurrentSourcePageType;
 
             // Only navigate if the selected page isn't currently loaded.
-            if (!(_page is null) && !Type.Equals(preNavPageType, _page))
+            if (!(_page is null) && !Equals(preNavPageType, _page))
             {
-                ContentFrame.Navigate(_page, null, transitionInfo);
+                _ = ContentFrame.Navigate(_page, null, transitionInfo);
             }
         }
     }

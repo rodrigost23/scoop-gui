@@ -8,13 +8,7 @@ namespace ScoopGui.Util
     {
         protected override string GetKeyForItem(ICommandBarElement item)
         {
-            if (item is FrameworkElement f)
-            {
-                return f.Tag as string;
-            } else
-            {
-                return item.ToString();
-            }
+            return item is FrameworkElement f ? f.Tag as string : item.ToString();
         }
     }
 }
