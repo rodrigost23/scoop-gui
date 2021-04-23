@@ -31,15 +31,6 @@ namespace ScoopGui
         public MainWindow()
         {
             InitializeComponent();
-
-            ScoopStreamReader.Read((line) =>
-            {
-                // TODO: Print to a text box instead
-                _ = DispatcherQueue.TryEnqueue(() =>
-                    {
-                        CommandPeek.Text = line;
-                    });
-            });
         }
 
         //~MainWindow()
