@@ -27,7 +27,14 @@
     <None Remove="App.xaml" />
     <None Remove="AppsListPage.xaml" />
     <None Remove="BrowsePage.xaml" />
+    <None Remove="ConsolePage.xaml" />
     <None Remove="MainWindow.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="ConsolePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

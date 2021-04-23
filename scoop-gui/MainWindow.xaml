@@ -25,11 +25,27 @@
 
             <NavigationView.MenuItems>
                 <NavigationViewItemHeader x:Name="AppsHeader" Content="Apps"/>
-                <NavigationViewItem Tag="installed" Content="Installed Apps" Icon="AllApps"/>
+                <NavigationViewItem Tag="installed" Content="Installed Apps">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE762;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem Tag="browse" Content="Browse" Icon="AllApps" />
                 <NavigationViewItemSeparator></NavigationViewItemSeparator>
-                <NavigationViewItem Tag="buckets"  Content="Buckets" Icon="Shop"/>
+                <NavigationViewItem Tag="buckets" Content="Buckets">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74C;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
+
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem Tag="console" Content="Console">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE756;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.FooterMenuItems>
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -40,12 +56,6 @@
                 <Frame x:Name="ContentFrame" IsTabStop="True" Grid.Row="0"/>
 
                 <CommandBar x:Name="MainCommandBar" DefaultLabelPosition="Right" Grid.Row="1">
-                    <AppBarButton Label="See commands" LabelPosition="Collapsed">
-                        <AppBarButton.Icon>
-                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE76C;"/>
-                        </AppBarButton.Icon>
-                    </AppBarButton>
-
                     <CommandBar.Content>
                         <TextBlock x:Name="CommandPeek" Text="" Margin="12,12"/>
                     </CommandBar.Content>

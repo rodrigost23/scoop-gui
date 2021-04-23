@@ -23,7 +23,9 @@ namespace ScoopGui
         {
             ("installed", typeof(AppsListPage)),
             ("browse", typeof(BrowsePage)),
+            ("console", typeof(ConsolePage)),
             //("buckets", typeof(BucketsPage)),
+            //("settings", typeof(SettingsPage)),
         };
 
         public MainWindow()
@@ -87,15 +89,8 @@ namespace ScoopGui
             Microsoft.UI.Xaml.Media.Animation.NavigationTransitionInfo transitionInfo)
         {
             Type _page = null;
-            if (navItemTag == "settings")
-            {
-                //_page = typeof(SettingsPage);
-            }
-            else
-            {
-                (string Tag, Type Page) item = _pages.FirstOrDefault(p => p.Tag.Equals(navItemTag, StringComparison.Ordinal));
-                _page = item.Page;
-            }
+            (string Tag, Type Page) item = _pages.FirstOrDefault(p => p.Tag.Equals(navItemTag, StringComparison.Ordinal));
+            _page = item.Page;
             // Get the page type before navigation so you can prevent duplicate
             // entries in the backstack.
             Type preNavPageType = ContentFrame.CurrentSourcePageType;
@@ -106,5 +101,15 @@ namespace ScoopGui
                 _ = ContentFrame.Navigate(_page, null, transitionInfo);
             }
         }
+
+        //private void ToggleConsole_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    SplitView.IsPaneOpen = true;
+        //}
+
+        //private void ToggleConsole_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    SplitView.IsPaneOpen = false;
+        //}
     }
 }
