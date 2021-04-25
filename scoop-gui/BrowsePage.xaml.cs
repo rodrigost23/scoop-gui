@@ -1,5 +1,7 @@
-﻿using Microsoft.UI.Xaml;
+﻿#nullable enable
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 using ScoopGui.Models;
 using ScoopGui.Util;
 using System.Collections.ObjectModel;
@@ -29,6 +31,10 @@ namespace ScoopGui
             }
         };
 
+        public string? Query => _query;
+
+        protected string? _query;
+
         public BrowsePage()
         {
             InitializeComponent();
@@ -48,6 +54,16 @@ namespace ScoopGui
             }
         }
 
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            string query = (string)e.Parameter;
+            if (_query != query)
+            {
+                _query = query;
+                await RefreshData();
+            }
+        }
+
         private async void Refresh_Click(object sender, RoutedEventArgs e)
         {
             await RefreshData();
@@ -60,7 +76,7 @@ namespace ScoopGui
 
             await Task.Run(async () =>
             {
-                await foreach (ScoopApp item in Scoop.Search())
+                await foreach (ScoopApp item in Scoop.Search(Query))
                 {
                     // Run in UI Thread
                     _ = DispatcherQueue.TryEnqueue(() => appsList.Add(item));

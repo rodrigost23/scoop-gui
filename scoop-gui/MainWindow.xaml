@@ -20,7 +20,7 @@
             SelectionChanged="NavView_SelectionChanged">
 
             <NavigationView.AutoSuggestBox>
-                <AutoSuggestBox x:Name="NavViewSearchBox" QueryIcon="Find" PlaceholderText="Search"/>
+                <AutoSuggestBox x:Name="NavViewSearchBox" QueryIcon="Find" PlaceholderText="Search" QuerySubmitted="NavViewSearchBox_QuerySubmitted"/>
             </NavigationView.AutoSuggestBox>
 
             <NavigationView.MenuItems>

@@ -93,6 +93,22 @@ namespace ScoopGui
             }
         }
 
+        private void NavViewSearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            Type _page = null;
+            (string Tag, Type Page) item = _pages.FirstOrDefault(p => p.Tag.Equals("browse", StringComparison.Ordinal));
+            _page = item.Page;
+            // Get the page type before navigation so you can prevent duplicate
+            // entries in the backstack.
+            Type preNavPageType = ContentFrame.CurrentSourcePageType;
+
+            // Only navigate if the selected page isn't currently loaded.
+            if (!(_page is null) && !Equals(preNavPageType, _page))
+            {
+                _ = ContentFrame.Navigate(_page, sender.Text);
+            }
+        }
+
         //private void ToggleConsole_Checked(object sender, RoutedEventArgs e)
         //{
         //    SplitView.IsPaneOpen = true;
