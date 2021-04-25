@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ScoopGui
@@ -76,15 +77,21 @@ namespace ScoopGui
 
         public static async IAsyncEnumerable<ScoopApp> Search(string query = null)
         {
-            await foreach (string line in RunAsync("search" + (query ?? "")))
-            {
-                string trimmed = line.Trim();
-                if (trimmed is "Installed apps:" or "")
-                {
-                    continue;
-                }
+            string pattern = @"(?<bucket>.+?)\/(?<name>.+)\n *Version: (?<version>.+)(?:\n *Description: (?<description>.*))?";
 
-                yield return new ScoopApp(name: trimmed);
+            string result = string.Join("\n", await RunAsync("search " + (query ?? "")).ToListAsync());
+
+            MatchCollection matches = Regex.Matches(result, pattern);
+
+            foreach (Match match in matches)
+            {
+                GroupCollection groups = match.Groups;
+
+                yield return new ScoopApp(name: groups["name"].Value)
+                {
+                    Version = groups["version"].Value,
+                    Bucket = new ScoopBucket(groups["bucket"].Value)
+                };
             }
         }
     }

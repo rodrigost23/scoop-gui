@@ -12,14 +12,38 @@
     Loaded="Page_Loaded">
 
     <Grid>
-        <ListView ItemsSource="{x:Bind appsList, Mode=OneWay}">
+        <ListView ItemsSource="{x:Bind appsList}">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="models:ScoopApp">
-                    <ListViewItem>
-                        <TextBlock Text="{x:Bind Name, Mode=OneWay}"></TextBlock>
-                    </ListViewItem>
+                    <StackPanel Padding="0,8,0,8" Grid.Column="0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Bind Name}"/>
+                            <TextBlock Text="{x:Bind Version}" Margin="8,0,0,0" Foreground="{ThemeResource ResourceKey=SystemAccentColor}"/>
+                            <StackPanel Visibility="{x:Bind IsFailed}"  Orientation="Horizontal" Margin="8,0,0,0">
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA39;" Foreground="Red" FontSize="16"/>
+                                <TextBlock Text="Failed" Foreground="Red" Margin="4,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBlock Text="{x:Bind Bucket}" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
+                    </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="ContextFlyout">
+                        <Setter.Value>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Uninstall" IsEnabled="false">
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74D;"/>
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                            </MenuFlyout>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
         </ListView>
 
         <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
