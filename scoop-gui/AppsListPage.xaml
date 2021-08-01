@@ -6,74 +6,82 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:ScoopGui"
     xmlns:models="using:ScoopGui.Models"
+    xmlns:util="using:ScoopGui.Util"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     NavigationCacheMode="Enabled"
     Loaded="Page_Loaded">
 
-    <Grid>
-        <ListView ItemsSource="{x:Bind appsList}">
-            <ListView.Header>
-                <Grid Margin="32,24">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+    <UserControl.Resources>
+        <util:NegateBooleanConverter x:Key="NegateBooleanConverter"/>
+    </UserControl.Resources>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+    <ScrollViewer>
+        <StackPanel>
+            <Grid Margin="32,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Library" VerticalAlignment="Center" Style="{ThemeResource ResourceKey=TitleTextBlockStyle}"/>
-                    <TextBlock Grid.Column="0" Grid.Row="1" Text="All your installed apps" VerticalAlignment="Center" Style="{ThemeResource ResourceKey=BodyTextBlockStyle}"/>
-                    <StackPanel Grid.Column="1" Grid.RowSpan="2" Orientation="Horizontal">
-                        <Button>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Library" VerticalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
+                    <TextBlock Text="All your installed apps" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
+                    <HyperlinkButton Content="Update all"/>
+                    <Button Click="Refresh_Click" IsEnabled="{x:Bind IsLoading.Value, Mode=OneWay, Converter={StaticResource NegateBooleanConverter}}">
+                        <Grid>
+                            <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="16" Height="16"></ProgressRing>
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <TextBlock Text="Refresh" />
                             </StackPanel>
-                        </Button>
-                    </StackPanel>
-
-                </Grid>
-            </ListView.Header>
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="models:ScoopApp">
-                    <StackPanel Padding="24,8" Grid.Column="0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Bind Name}"/>
-                            <TextBlock Text="{x:Bind Version}" Margin="8,0,0,0" Foreground="{ThemeResource ResourceKey=SystemAccentColor}"/>
-                            <StackPanel Visibility="{x:Bind IsFailed}"  Orientation="Horizontal" Margin="8,0,0,0">
-                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEA39;" Foreground="Red" FontSize="16"/>
-                                <TextBlock Text="Failed" Foreground="Red" Margin="4,0,0,0"/>
+                        </Grid>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <Grid>
+                <ListView ItemsSource="{x:Bind appsList}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ScoopApp">
+                            <StackPanel Padding="24,8" Grid.Column="0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{x:Bind Name}"/>
+                                    <TextBlock Text="{x:Bind Version}" Margin="8,0,0,0" Foreground="{ThemeResource ResourceKey=SystemAccentColor}"/>
+                                    <StackPanel Visibility="{x:Bind IsFailed}"  Orientation="Horizontal" Margin="8,0,0,0">
+                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEA39;" Foreground="Red" FontSize="16"/>
+                                        <TextBlock Text="Failed" Foreground="Red" Margin="4,0,0,0"/>
+                                    </StackPanel>
+                                    <StackPanel Visibility="{x:Bind IsHold}"  Orientation="Horizontal" Margin="8,0,0,0">
+                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8D8;" Foreground="MediumPurple" FontSize="16"/>
+                                        <TextBlock Text="Held" Foreground="MediumPurple" Margin="4,0,0,0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <TextBlock Text="{x:Bind Bucket}" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
                             </StackPanel>
-                            <StackPanel Visibility="{x:Bind IsHold}"  Orientation="Horizontal" Margin="8,0,0,0">
-                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8D8;" Foreground="MediumPurple" FontSize="16"/>
-                                <TextBlock Text="Held" Foreground="MediumPurple" Margin="4,0,0,0"/>
-                            </StackPanel>
-                        </StackPanel>
-                        <TextBlock Text="{x:Bind Bucket}" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
 
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="ContextFlyout">
-                        <Setter.Value>
-                            <MenuFlyout>
-                                <MenuFlyoutItem Text="Uninstall" IsEnabled="false">
-                                    <MenuFlyoutItem.Icon>
-                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                            </MenuFlyout>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
-        </ListView>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="ContextFlyout">
+                                <Setter.Value>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Uninstall" IsEnabled="false">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                    </MenuFlyout>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
 
-        <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
-    </Grid>
+                <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
 </local:BasePage>
