@@ -31,6 +31,8 @@ namespace ScoopGui
         public MainWindow()
         {
             InitializeComponent();
+            ExtendsContentIntoTitleBar = true;
+            SetTitleBar(CustomTitleBar);
         }
 
         //~MainWindow()

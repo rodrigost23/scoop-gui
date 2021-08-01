@@ -49,13 +49,18 @@
 
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Frame x:Name="ContentFrame" IsTabStop="True" Grid.Row="0"/>
+                <Grid Grid.Row="0" Height="40"  x:Name="CustomTitleBar" IsHitTestVisible="False">
+                    
+                </Grid>
 
-                <CommandBar x:Name="MainCommandBar" DefaultLabelPosition="Right" Grid.Row="1">
+                <Frame x:Name="ContentFrame" IsTabStop="True" Grid.Row="1"/>
+
+                <CommandBar x:Name="MainCommandBar" DefaultLabelPosition="Right" Grid.Row="2">
                     <CommandBar.Content>
                         <TextBlock x:Name="CommandPeek" Text="" Margin="12,12"/>
                     </CommandBar.Content>
