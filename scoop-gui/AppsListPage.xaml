@@ -23,6 +23,10 @@
                                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA39;" Foreground="Red" FontSize="16"/>
                                 <TextBlock Text="Failed" Foreground="Red" Margin="4,0,0,0"/>
                             </StackPanel>
+                            <StackPanel Visibility="{x:Bind IsHold}"  Orientation="Horizontal" Margin="8,0,0,0">
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8D8;" Foreground="MediumPurple" FontSize="16"/>
+                                <TextBlock Text="Held" Foreground="MediumPurple" Margin="4,0,0,0"/>
+                            </StackPanel>
                         </StackPanel>
                         <TextBlock Text="{x:Bind Bucket}" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
                     </StackPanel>

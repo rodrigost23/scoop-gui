@@ -13,6 +13,7 @@ namespace ScoopGui.Models
         public bool? IsInstalled { get; set; }
 
         public bool IsFailed { get; set; }
+        public bool IsHold { get; set; }
 
         public ScoopApp(string name)
         {

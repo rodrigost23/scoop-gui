@@ -54,7 +54,7 @@ namespace ScoopGui
 
         public static async IAsyncEnumerable<ScoopApp> List()
         {
-            string pattern = @"^(?<name>[\w\-]+)(?:\s+(?<version>[\w\.\-]+))?(?:\s+\[(?<bucket>.+)\])?(?:\s+(?<failed>\*failed\*))?$";
+            string pattern = @"^(?<name>[\w\-]+)(?:\s+(?<version>[\w\.\-]+))?(?:\s+\*(?<flag>.+)\*)?(?:\s+\[(?<bucket>.+)\])?$";
             await foreach (string line in RunAsync("list"))
             {
                 string trimmed = line.Trim();
@@ -70,7 +70,8 @@ namespace ScoopGui
                     IsInstalled = true,
                     Version = groups["version"].Value,
                     Bucket = new ScoopBucket(groups["bucket"].Value),
-                    IsFailed = groups["failed"].Value != ""
+                    IsFailed = groups["flag"].Value == "failed",
+                    IsHold = groups["flag"].Value == "hold"
                 };
             }
         }
