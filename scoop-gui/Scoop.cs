@@ -58,12 +58,13 @@ namespace ScoopGui
             await foreach (string line in RunAsync("list"))
             {
                 string trimmed = line.Trim();
-                if (trimmed is "Installed apps:" or "")
+
+                GroupCollection groups = Regex.Match(trimmed, pattern).Groups;
+
+                if (string.IsNullOrEmpty(groups["name"].Value))
                 {
                     continue;
                 }
-
-                GroupCollection groups = Regex.Match(trimmed, pattern).Groups;
 
                 yield return new ScoopApp(name: groups["name"].Value)
                 {
