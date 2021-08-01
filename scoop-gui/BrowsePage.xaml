@@ -36,7 +36,7 @@
                             <MenuFlyout>
                                 <MenuFlyoutItem Text="Uninstall" IsEnabled="false">
                                     <MenuFlyoutItem.Icon>
-                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74D;"/>
+                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
                                     </MenuFlyoutItem.Icon>
                                 </MenuFlyoutItem>
                             </MenuFlyout>

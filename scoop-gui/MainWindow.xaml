@@ -24,17 +24,20 @@
             </NavigationView.AutoSuggestBox>
 
             <NavigationView.MenuItems>
-                <NavigationViewItemHeader x:Name="AppsHeader" Content="Apps"/>
-                <NavigationViewItem Tag="installed" Content="Installed Apps">
+                <NavigationViewItem Tag="browse" Content="Browse">
                     <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE762;"/>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74C;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Tag="browse" Content="Browse" Icon="AllApps" />
-                <NavigationViewItemSeparator></NavigationViewItemSeparator>
+                <NavigationViewItem Tag="installed" Content="Installed Apps">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8F1;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItemSeparator />
                 <NavigationViewItem Tag="buckets" Content="Buckets">
                     <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74C;"/>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE7B8;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
@@ -42,9 +45,10 @@
             <NavigationView.FooterMenuItems>
                 <NavigationViewItem Tag="console" Content="Console">
                     <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE756;"/>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE756;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+                <NavigationViewItemSeparator />
             </NavigationView.FooterMenuItems>
 
             <Grid>
@@ -54,9 +58,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Height="40"  x:Name="CustomTitleBar" IsHitTestVisible="False">
-                    
-                </Grid>
+                <Grid Grid.Row="0" Height="40"  x:Name="CustomTitleBar" IsHitTestVisible="False"></Grid>
 
                 <Frame x:Name="ContentFrame" IsTabStop="True" Grid.Row="1"/>
 
