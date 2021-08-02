@@ -6,16 +6,46 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:ScoopGui"
     xmlns:models="using:ScoopGui.Models"
+    xmlns:util="using:ScoopGui.Util"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     NavigationCacheMode="Enabled"
     Loaded="Page_Loaded">
 
+    <UserControl.Resources>
+        <util:NegateBooleanConverter x:Key="NegateBooleanConverter"/>
+    </UserControl.Resources>
+
     <Grid>
-        <ListView ItemsSource="{x:Bind appsList}">
+        <ListView ItemsSource="{x:Bind AppsList.All}">
+            <ListView.Header>
+                <Grid Margin="32,24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="All apps" VerticalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
+                        <TextBlock Text="Browse all apps for the installed buckets" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
+                        <Button Click="Refresh_Click" IsEnabled="{x:Bind IsLoading.Value, Mode=OneWay, Converter={StaticResource NegateBooleanConverter}}">
+                            <Grid>
+                                <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="16" Height="16"></ProgressRing>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock Text="Refresh" />
+                                </StackPanel>
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </ListView.Header>
+
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="models:ScoopApp">
-                    <StackPanel Padding="0,8,0,8" Grid.Column="0">
+                    <StackPanel Padding="24,8" Grid.Column="0">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{x:Bind Name}"/>
                             <TextBlock Text="{x:Bind VersionUpstream}" Margin="8,0,0,0" Foreground="{ThemeResource ResourceKey=SystemAccentColor}"/>

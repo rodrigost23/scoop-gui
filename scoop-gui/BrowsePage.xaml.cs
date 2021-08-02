@@ -4,7 +4,8 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using ScoopGui.Models;
 using ScoopGui.Util;
-using System.Collections.ObjectModel;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -14,7 +15,7 @@ namespace ScoopGui
 {
     public sealed partial class BrowsePage : BasePage
     {
-        public ObservableCollection<ScoopApp> appsList = new();
+        public State.AppsListClass AppsList => state.AppsList;
 
         public ObservableObject<bool> IsLoading { get; } = false;
 
@@ -31,9 +32,7 @@ namespace ScoopGui
             }
         };
 
-        public string? Query => _query;
-
-        protected string? _query;
+        public string? Query { get; private set; }
 
         public BrowsePage()
         {
@@ -48,7 +47,7 @@ namespace ScoopGui
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (appsList.Count == 0 && !IsLoading)
+            if (AppsList.All.Count == 0 && !IsLoading)
             {
                 await RefreshData();
             }
@@ -57,9 +56,9 @@ namespace ScoopGui
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             string query = (string)e.Parameter;
-            if (_query != query)
+            if (Query != query)
             {
-                _query = query;
+                Query = query;
                 await RefreshData();
             }
         }
@@ -72,14 +71,33 @@ namespace ScoopGui
         private async Task RefreshData()
         {
             IsLoading.Value = true;
-            appsList.Clear();
 
             await Task.Run(async () =>
             {
                 await foreach (ScoopApp item in Scoop.Search(Query))
                 {
                     // Run in UI Thread
-                    _ = DispatcherQueue.TryEnqueue(() => appsList.Add(item));
+                    _ = DispatcherQueue.TryEnqueue(() =>
+                    {
+                        int index = AppsList.All.ToList().FindIndex(x => x.Name == item.Name);
+                        if (index > -1)
+                        {
+                            AppsList.All[index].VersionUpstream = item.VersionUpstream;
+                        }
+                        else
+                        {
+                            index = AppsList.All.ToList().FindIndex(x => string.Compare(x.Name, item.Name, StringComparison.OrdinalIgnoreCase) > 0);
+
+                            if (index > -1)
+                            {
+                                AppsList.All.Insert(index, item);
+                            }
+                            else
+                            {
+                                AppsList.All.Add(item);
+                            }
+                        }
+                    });
                 }
             });
 
