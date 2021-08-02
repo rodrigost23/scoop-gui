@@ -76,6 +76,31 @@ namespace ScoopGui
                 };
             }
         }
+        public static async IAsyncEnumerable<ScoopApp> Status()
+        {
+            string pattern = @"^\s*(?<name>[\w\-]+)\:\s*(?<version>[\w\.\-]+)\s*\->\s*(?<versionUpstream>[\w\.\-]+)$";
+            await foreach (string line in RunAsync("status"))
+            {
+                string trimmed = line.Trim();
+
+                GroupCollection groups = Regex.Match(trimmed, pattern).Groups;
+
+                if (string.IsNullOrEmpty(groups["name"].Value))
+                {
+                    continue;
+                }
+
+                yield return new ScoopApp(name: groups["name"].Value)
+                {
+                    IsInstalled = true,
+                    Version = groups["version"].Value,
+                    VersionUpstream = groups["versionUpstream"].Value,
+                    Bucket = new ScoopBucket(groups["bucket"].Value),
+                    IsFailed = groups["flag"].Value == "failed",
+                    IsHold = groups["flag"].Value == "hold"
+                };
+            }
+        }
 
         public static async IAsyncEnumerable<ScoopApp> Search(string query = null)
         {
@@ -91,7 +116,7 @@ namespace ScoopGui
 
                 yield return new ScoopApp(name: groups["name"].Value)
                 {
-                    Version = groups["version"].Value,
+                    VersionUpstream = groups["version"].Value,
                     Bucket = new ScoopBucket(groups["bucket"].Value)
                 };
             }

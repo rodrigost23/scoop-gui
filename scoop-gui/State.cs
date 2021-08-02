@@ -27,6 +27,8 @@ namespace ScoopGui
 
             public Filtering<ScoopApp> Installed => appsList.Filtering(app => app.IsInstalled ?? false).For(consumer);
 
+            public Filtering<ScoopApp> InstalledNotUpdatable => appsList.Filtering(app => (app.IsInstalled ?? false) && !(app.IsUpdatable ?? false)).For(consumer);
+
             public Filtering<ScoopApp> Updatable => appsList.Filtering(app => app.IsUpdatable ?? false).For(consumer);
 
             public void AddOrUpdate(ScoopApp app)

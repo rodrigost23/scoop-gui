@@ -100,6 +100,23 @@ namespace ScoopGui
                 }
             });
 
+            await Task.Run(async () =>
+            {
+                await foreach (ScoopApp item in Scoop.Status())
+                {
+                    // Run in UI Thread
+                    _ = DispatcherQueue.TryEnqueue(() =>
+                    {
+                        int index = AppsList.All.ToList().FindIndex(x => x.Name == item.Name);
+                        if (index > -1)
+                        {
+                            AppsList.All[index].Version = item.Version;
+                            AppsList.All[index].VersionUpstream = item.VersionUpstream;
+                        }
+                    });
+                }
+            });
+
             IsLoading.Value = false;
         }
     }

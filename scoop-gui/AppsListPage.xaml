@@ -8,7 +8,7 @@
     xmlns:models="using:ScoopGui.Models"
     xmlns:util="using:ScoopGui.Util"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Background="{ThemeResource AppBarBackgroundThemeBrush}"
     NavigationCacheMode="Enabled"
     Loaded="Page_Loaded">
 
@@ -41,8 +41,48 @@
                     </Button>
                 </StackPanel>
             </Grid>
+
+            <ListView ItemsSource="{x:Bind AppsList.Updatable}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:ScoopApp">
+                        <StackPanel Padding="24,8" Grid.Column="0">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="{x:Bind Name}"/>
+                                <TextBlock Text="{x:Bind Version}" Foreground="{ThemeResource ResourceKey=SystemListAccentLowColor}"/>
+                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF0AF;" Foreground="{ThemeResource ResourceKey=SystemBaseHighColor}" FontSize="8"/>
+                                <TextBlock Text="{x:Bind VersionUpstream}" Foreground="{ThemeResource ResourceKey=SystemAccentColor}"/>
+                                <StackPanel Visibility="{x:Bind IsFailed}"  Orientation="Horizontal" Spacing="4">
+                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEA39;" Foreground="Red" FontSize="16"/>
+                                    <TextBlock Text="Failed" Foreground="Red"/>
+                                </StackPanel>
+                                <StackPanel Visibility="{x:Bind IsHold}"  Orientation="Horizontal" Spacing="4">
+                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8D8;" Foreground="MediumPurple" FontSize="16"/>
+                                    <TextBlock Text="Held" Foreground="MediumPurple"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <TextBlock Text="{x:Bind Bucket}" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="ContextFlyout">
+                            <Setter.Value>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="Uninstall" IsEnabled="false">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                </MenuFlyout>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
             <Grid>
-                <ListView ItemsSource="{x:Bind AppsList.Installed}">
+                <ListView ItemsSource="{x:Bind AppsList.InstalledNotUpdatable}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="models:ScoopApp">
                             <StackPanel Padding="24,8" Grid.Column="0">
