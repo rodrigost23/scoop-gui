@@ -42,7 +42,7 @@
                 </StackPanel>
             </Grid>
             <Grid>
-                <ListView ItemsSource="{x:Bind appsList}">
+                <ListView ItemsSource="{x:Bind AppsList.Installed}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="models:ScoopApp">
                             <StackPanel Padding="24,8" Grid.Column="0">

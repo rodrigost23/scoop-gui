@@ -2,7 +2,8 @@
 using Microsoft.UI.Xaml.Controls;
 using ScoopGui.Models;
 using ScoopGui.Util;
-using System.Collections.ObjectModel;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -15,7 +16,7 @@ namespace ScoopGui
     /// </summary>
     public sealed partial class AppsListPage : BasePage
     {
-        public ObservableCollection<ScoopApp> appsList = new();
+        public State.AppsListClass AppsList => state.AppsList;
 
         public ObservableObject<bool> IsLoading { get; } = false;
         protected override CommandList MenuItems => _menuItems;
@@ -44,7 +45,7 @@ namespace ScoopGui
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (appsList.Count == 0 && !IsLoading)
+            if (!AppsList.Installed.Any() && !IsLoading)
             {
                 await RefreshData();
             }
@@ -58,14 +59,44 @@ namespace ScoopGui
         private async Task RefreshData()
         {
             IsLoading.Value = true;
-            appsList.Clear();
+
+            // TODO: Instead of clearing the list, try to remove only those that are not installed anymore
+            foreach (ScoopApp app in AppsList.Installed)
+            {
+                // Run in UI Thread
+                _ = DispatcherQueue.TryEnqueue(() =>
+                {
+                    app.IsInstalled = false;
+                });
+            }
 
             await Task.Run(async () =>
             {
                 await foreach (ScoopApp item in Scoop.List())
                 {
                     // Run in UI Thread
-                    _ = DispatcherQueue.TryEnqueue(() => appsList.Add(item));
+                    _ = DispatcherQueue.TryEnqueue(() =>
+                    {
+                        int index = AppsList.All.ToList().FindIndex(x => x.Name == item.Name);
+                        if (index > -1)
+                        {
+                            item.VersionUpstream = AppsList.All[index].VersionUpstream;
+                            AppsList.All[index] = item;
+                        }
+                        else
+                        {
+                            index = AppsList.All.ToList().FindIndex(x => string.Compare(x.Name, item.Name, StringComparison.CurrentCultureIgnoreCase) > 0);
+
+                            if (index > -1)
+                            {
+                                AppsList.All.Insert(index, item);
+                            }
+                            else
+                            {
+                                AppsList.All.Add(item);
+                            }
+                        }
+                    });
                 }
             });
 

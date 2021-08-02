@@ -9,6 +9,8 @@ namespace ScoopGui
     {
         private readonly App _app = Application.Current as App;
 
+        protected readonly State state = State.Instance;
+
         protected abstract CommandList MenuItems { get; }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

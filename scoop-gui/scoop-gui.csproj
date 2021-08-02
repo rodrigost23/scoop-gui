@@ -16,6 +16,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.1" />
     <PackageReference Include="Microsoft.VCRTForwarders.140" Version="1.0.7" />
+    <PackageReference Include="ObservableComputations" Version="2.2.0" />
+    <PackageReference Include="PropertyChanged.SourceGenerator" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.Linq" Version="4.3.0" />
     <PackageReference Include="System.Linq.Async" Version="5.0.0" />
     <Manifest Include="$(ApplicationManifest)" />
