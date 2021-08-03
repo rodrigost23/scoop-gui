@@ -85,7 +85,7 @@
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1" Spacing="4">
-                                    <Button Content="Update" IsEnabled="{x:Bind IsHold, Converter={StaticResource NegateBooleanConverter}}"/>
+                                    <Button Content="Update" Style="{StaticResource AccentButtonStyle}" IsEnabled="{x:Bind IsHold, Converter={StaticResource NegateBooleanConverter}}"/>
                                     <Button>
                                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE712;" FontSize="16" Margin="0,1"/>
 

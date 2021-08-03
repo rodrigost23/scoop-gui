@@ -32,7 +32,7 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
-                        <Button IsEnabled="{x:Bind IsLoading.Value, Mode=OneWay, Converter={StaticResource NegateBooleanConverter}}">
+                        <Button IsEnabled="{x:Bind IsLoading.Value, Mode=OneWay, Converter={StaticResource NegateBooleanConverter}}" Style="{StaticResource AccentButtonStyle}">
                             <Grid>
                                 <ProgressRing IsActive="False" Width="16" Height="16"></ProgressRing>
                                 <StackPanel Orientation="Horizontal" Spacing="8">
