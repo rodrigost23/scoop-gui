@@ -10,6 +10,8 @@ namespace ScoopGui
     {
         public AppsListClass AppsList { get; } = new AppsListClass();
 
+        public ObservableCollection<ScoopBucket> BucketsList { get; } = new();
+
         private State()
         {
         }

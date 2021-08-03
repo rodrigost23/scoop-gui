@@ -121,5 +121,14 @@ namespace ScoopGui
                 };
             }
         }
+
+        public static async IAsyncEnumerable<ScoopBucket> BucketList()
+        {
+            await foreach (string line in RunAsync("bucket list"))
+            {
+                string trimmed = line.Trim();
+                yield return new ScoopBucket(name: trimmed);
+            }
+        }
     }
 }

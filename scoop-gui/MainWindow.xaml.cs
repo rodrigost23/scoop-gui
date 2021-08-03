@@ -24,7 +24,7 @@ namespace ScoopGui
             ("installed", typeof(AppsListPage)),
             ("browse", typeof(BrowsePage)),
             ("console", typeof(ConsolePage)),
-            //("buckets", typeof(BucketsPage)),
+            ("buckets", typeof(BucketsPage)),
             //("settings", typeof(SettingsPage)),
         };
 

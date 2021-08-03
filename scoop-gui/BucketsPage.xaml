@@ -1,0 +1,82 @@
+﻿<local:BasePage
+    x:Class="ScoopGui.BucketsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:ScoopGui"
+    xmlns:models="using:ScoopGui.Models"
+    xmlns:util="using:ScoopGui.Util"
+    mc:Ignorable="d"
+    NavigationCacheMode="Enabled"
+    Loaded="Page_Loaded">
+
+    <UserControl.Resources>
+        <util:NegateBooleanConverter x:Key="NegateBooleanConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
+
+        <ScrollViewer>
+            <StackPanel>
+                <Grid Margin="32,24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Buckets" VerticalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
+                        <TextBlock Text="Manage your apps repositories" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
+                        <Button IsEnabled="{x:Bind IsLoading.Value, Mode=OneWay, Converter={StaticResource NegateBooleanConverter}}">
+                            <Grid>
+                                <ProgressRing IsActive="False" Width="16" Height="16"></ProgressRing>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock Text="Add" />
+                                </StackPanel>
+                            </Grid>
+                        </Button>
+                        <Button Click="Refresh_Click" IsEnabled="{x:Bind IsLoading.Value, Mode=OneWay, Converter={StaticResource NegateBooleanConverter}}">
+                            <Grid>
+                                <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="16" Height="16"></ProgressRing>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock Text="Refresh" />
+                                </StackPanel>
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                <ListView ItemsSource="{x:Bind BucketsList}"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="8">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ScoopBucket">
+                            <StackPanel Padding="24,8" Grid.Column="0">
+                                <TextBlock Text="{x:Bind Name}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="ContextFlyout">
+                                <Setter.Value>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Uninstall" IsEnabled="false">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                    </MenuFlyout>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</local:BasePage>
