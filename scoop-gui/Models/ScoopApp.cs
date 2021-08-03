@@ -15,7 +15,7 @@ namespace ScoopGui.Models
         [Notify] private bool? _isHold;
 
         public bool? IsUpdatable => IsInstalled == null || Version == null || VersionUpstream == null ? null
-                                    : (Version != VersionUpstream && !(IsHold ?? false));
+                                    : (Version != VersionUpstream);
 
         public ScoopApp(string name)
         {

@@ -60,7 +60,7 @@
 
                 <Grid Grid.Row="0" Height="40"  x:Name="CustomTitleBar" IsHitTestVisible="False"></Grid>
 
-                <Frame x:Name="ContentFrame" IsTabStop="True" Grid.Row="1"/>
+                <Frame x:Name="ContentFrame" IsTabStop="True" Grid.Row="1" Background="{ThemeResource AppBarBackgroundThemeBrush}"/>
 
                 <CommandBar x:Name="MainCommandBar" DefaultLabelPosition="Right" Grid.Row="2">
                     <CommandBar.Content>

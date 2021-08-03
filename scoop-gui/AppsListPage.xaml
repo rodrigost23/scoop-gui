@@ -8,98 +8,99 @@
     xmlns:models="using:ScoopGui.Models"
     xmlns:util="using:ScoopGui.Util"
     mc:Ignorable="d"
-    Background="{ThemeResource AppBarBackgroundThemeBrush}"
     NavigationCacheMode="Enabled"
     Loaded="Page_Loaded">
 
-    <UserControl.Resources>
+    <local:BasePage.Resources>
         <util:NegateBooleanConverter x:Key="NegateBooleanConverter"/>
-    </UserControl.Resources>
+    </local:BasePage.Resources>
 
-    <ScrollViewer>
-        <StackPanel>
-            <Grid Margin="32,24">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+    <Grid>
+        <ScrollViewer>
+            <StackPanel Spacing="24">
+                <Grid Margin="32,24,32,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0">
-                    <TextBlock Text="Library" VerticalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
-                    <TextBlock Text="All your installed apps" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}"/>
-                </StackPanel>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Library" VerticalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
+                        <TextBlock Text="All your installed apps" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}"/>
+                    </StackPanel>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
-                    <HyperlinkButton Content="Update all"/>
-                    <Button Click="Refresh_Click" IsEnabled="{x:Bind IsLoading.Value, Mode=OneWay, Converter={StaticResource NegateBooleanConverter}}">
-                        <Grid>
-                            <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="16" Height="16"></ProgressRing>
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <TextBlock Text="Refresh" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
+                        <Button Click="Refresh_Click" IsEnabled="{x:Bind IsLoading.Value, Mode=OneWay, Converter={StaticResource NegateBooleanConverter}}">
+                            <Grid>
+                                <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="16" Height="16"></ProgressRing>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock Text="Refresh" />
+                                </StackPanel>
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <ListView ItemsSource="{x:Bind AppsList.Updatable}" Margin="24,0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="8">
+                    <ListView.Header>
+                        <Grid Margin="24,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Updates" VerticalAlignment="Center" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
+                                <HyperlinkButton Content="Update all"/>
                             </StackPanel>
                         </Grid>
-                    </Button>
-                </StackPanel>
-            </Grid>
-
-            <ListView ItemsSource="{x:Bind AppsList.Updatable}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="models:ScoopApp">
-                        <StackPanel Padding="24,8" Grid.Column="0">
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <TextBlock Text="{x:Bind Name}"/>
-                                <TextBlock Text="{x:Bind Version}" Foreground="{ThemeResource ResourceKey=SystemListAccentLowColor}"/>
-                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF0AF;" Foreground="{ThemeResource ResourceKey=SystemBaseHighColor}" FontSize="8"/>
-                                <TextBlock Text="{x:Bind VersionUpstream}" Foreground="{ThemeResource ResourceKey=SystemAccentColor}"/>
-                                <StackPanel Visibility="{x:Bind IsFailed}"  Orientation="Horizontal" Spacing="4">
-                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEA39;" Foreground="Red" FontSize="16"/>
-                                    <TextBlock Text="Failed" Foreground="Red"/>
-                                </StackPanel>
-                                <StackPanel Visibility="{x:Bind IsHold}"  Orientation="Horizontal" Spacing="4">
-                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8D8;" Foreground="MediumPurple" FontSize="16"/>
-                                    <TextBlock Text="Held" Foreground="MediumPurple"/>
-                                </StackPanel>
-                            </StackPanel>
-                            <TextBlock Text="{x:Bind Bucket}" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="ContextFlyout">
-                            <Setter.Value>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem Text="Uninstall" IsEnabled="false">
-                                        <MenuFlyoutItem.Icon>
-                                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
-                                        </MenuFlyoutItem.Icon>
-                                    </MenuFlyoutItem>
-                                </MenuFlyout>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
-            <Grid>
-                <ListView ItemsSource="{x:Bind AppsList.InstalledNotUpdatable}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    </ListView.Header>
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="models:ScoopApp">
-                            <StackPanel Padding="24,8" Grid.Column="0">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{x:Bind Name}"/>
-                                    <TextBlock Text="{x:Bind Version}" Margin="8,0,0,0" Foreground="{ThemeResource ResourceKey=SystemAccentColor}"/>
-                                    <StackPanel Visibility="{x:Bind IsFailed}"  Orientation="Horizontal" Margin="8,0,0,0">
-                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEA39;" Foreground="Red" FontSize="16"/>
-                                        <TextBlock Text="Failed" Foreground="Red" Margin="4,0,0,0"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Padding="8,8" Grid.Column="0">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="{x:Bind Name}"/>
+                                        <TextBlock Text="{x:Bind Version}" Foreground="{ThemeResource ResourceKey=SystemListAccentLowColor}"/>
+                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF0AF;" Foreground="{ThemeResource ResourceKey=SystemBaseHighColor}" FontSize="8"/>
+                                        <TextBlock Text="{x:Bind VersionUpstream}" Foreground="{ThemeResource ResourceKey=SystemAccentColor}"/>
+                                        <StackPanel Visibility="{x:Bind IsFailed}"  Orientation="Horizontal" Spacing="4">
+                                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEA39;" Foreground="Red" FontSize="16"/>
+                                            <TextBlock Text="Failed" Foreground="Red"/>
+                                        </StackPanel>
+                                        <StackPanel Visibility="{x:Bind IsHold}"  Orientation="Horizontal" Spacing="4">
+                                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8D8;" Foreground="MediumPurple" FontSize="16"/>
+                                            <TextBlock Text="Held" Foreground="MediumPurple"/>
+                                        </StackPanel>
                                     </StackPanel>
-                                    <StackPanel Visibility="{x:Bind IsHold}"  Orientation="Horizontal" Margin="8,0,0,0">
-                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8D8;" Foreground="MediumPurple" FontSize="16"/>
-                                        <TextBlock Text="Held" Foreground="MediumPurple" Margin="4,0,0,0"/>
-                                    </StackPanel>
+                                    <TextBlock Text="{x:Bind Bucket}" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
                                 </StackPanel>
-                                <TextBlock Text="{x:Bind Bucket}" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
-                            </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Grid.Column="1" Spacing="4">
+                                    <Button Content="Update" IsEnabled="{x:Bind IsHold, Converter={StaticResource NegateBooleanConverter}}"/>
+                                    <Button>
+                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE712;" FontSize="16" Margin="0,1"/>
+
+                                        <Button.Flyout>
+                                            <MenuFlyout>
+                                                <MenuFlyoutItem Text="Uninstall">
+                                                    <MenuFlyoutItem.Icon>
+                                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
+                                                    </MenuFlyoutItem.Icon>
+                                                </MenuFlyoutItem>
+                                            </MenuFlyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
 
@@ -108,7 +109,7 @@
                             <Setter Property="ContextFlyout">
                                 <Setter.Value>
                                     <MenuFlyout>
-                                        <MenuFlyoutItem Text="Uninstall" IsEnabled="false">
+                                        <MenuFlyoutItem Text="Uninstall">
                                             <MenuFlyoutItem.Icon>
                                                 <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
                                             </MenuFlyoutItem.Icon>
@@ -116,12 +117,79 @@
                                     </MenuFlyout>
                                 </Setter.Value>
                             </Setter>
+
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>
 
-                <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
-            </Grid>
-        </StackPanel>
-    </ScrollViewer>
+                <ListView ItemsSource="{x:Bind AppsList.InstalledNotUpdatable}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="8">
+                    <ListView.Header>
+                        <TextBlock  Margin="32,16" Text="Other apps" VerticalAlignment="Center" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+                    </ListView.Header>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ScoopApp">
+                            <Grid Padding="24,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{x:Bind Name}"/>
+                                        <TextBlock Text="{x:Bind Version}" Margin="8,0,0,0" Foreground="{ThemeResource ResourceKey=SystemAccentColor}"/>
+                                        <StackPanel Visibility="{x:Bind IsFailed}"  Orientation="Horizontal" Margin="8,0,0,0">
+                                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEA39;" Foreground="Red" FontSize="16"/>
+                                            <TextBlock Text="Failed" Foreground="Red" Margin="4,0,0,0"/>
+                                        </StackPanel>
+                                        <StackPanel Visibility="{x:Bind IsHold}"  Orientation="Horizontal" Margin="8,0,0,0">
+                                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8D8;" Foreground="MediumPurple" FontSize="16"/>
+                                            <TextBlock Text="Held" Foreground="MediumPurple" Margin="4,0,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <TextBlock Text="{x:Bind Bucket}" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
+                                </StackPanel>
+
+
+                                <Button Grid.Column="1">
+                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE712;" FontSize="16" Margin="0,1"/>
+
+                                    <Button.Flyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="Uninstall">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+                                        </MenuFlyout>
+                                    </Button.Flyout>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="ContextFlyout">
+                                <Setter.Value>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Uninstall">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                    </MenuFlyout>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </StackPanel>
+        </ScrollViewer>
+        <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
+    </Grid>
 </local:BasePage>
