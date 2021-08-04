@@ -1,8 +1,5 @@
 ﻿#nullable enable
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media.Animation;
-using ObservableComputations;
 using PropertyChanged.SourceGenerator;
 using ScoopGui.Models;
 using ScoopGui.Util;

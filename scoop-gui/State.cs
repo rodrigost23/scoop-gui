@@ -12,7 +12,7 @@ namespace ScoopGui
 
         public ObservableCollection<ScoopBucket> BucketsList { get; } = new();
 
-        public ObservableCollection<ScoopBucket> BucketsKnown{ get; } = new();
+        public ObservableCollection<ScoopBucket> BucketsKnown { get; } = new();
 
         private State()
         {
