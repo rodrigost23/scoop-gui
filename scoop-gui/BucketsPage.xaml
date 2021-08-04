@@ -6,14 +6,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:ScoopGui"
     xmlns:models="using:ScoopGui.Models"
-    xmlns:util="using:ScoopGui.Util"
+    xmlns:converters="using:CommunityToolkit.WinUI.UI.Converters"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled"
     Loaded="Page_Loaded">
 
     <UserControl.Resources>
-        <util:NegateBooleanConverter x:Key="NegateBooleanConverter"/>
-        <util:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -31,7 +31,7 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
-                        <Button Click="Add_Click" IsEnabled="{x:Bind IsLoadingKnown.Value, Mode=OneWay, Converter={StaticResource NegateBooleanConverter}}" Style="{StaticResource AccentButtonStyle}">
+                        <Button Click="Add_Click" IsEnabled="{x:Bind IsLoadingKnown.Value, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}" Style="{StaticResource AccentButtonStyle}">
                             <Grid>
                                 <ProgressRing IsActive="{x:Bind IsLoadingKnown.Value, Mode=OneWay}" Width="16" Height="16"></ProgressRing>
                                 <StackPanel Orientation="Horizontal" Spacing="8">
@@ -39,7 +39,7 @@
                                 </StackPanel>
                             </Grid>
                         </Button>
-                        <Button Click="Refresh_Click" IsEnabled="{x:Bind IsLoading.Value, Mode=OneWay, Converter={StaticResource NegateBooleanConverter}}">
+                        <Button Click="Refresh_Click" IsEnabled="{x:Bind IsLoading.Value, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}">
                             <Grid>
                                 <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="16" Height="16"></ProgressRing>
                                 <StackPanel Orientation="Horizontal" Spacing="8">

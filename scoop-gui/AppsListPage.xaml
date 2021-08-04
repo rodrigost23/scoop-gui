@@ -6,13 +6,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:ScoopGui"
     xmlns:models="using:ScoopGui.Models"
-    xmlns:util="using:ScoopGui.Util"
+    xmlns:converters="using:CommunityToolkit.WinUI.UI.Converters"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled"
     Loaded="Page_Loaded">
 
     <local:BasePage.Resources>
-        <util:NegateBooleanConverter x:Key="NegateBooleanConverter"/>
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
     </local:BasePage.Resources>
 
     <Grid>
@@ -30,7 +30,7 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
-                        <Button Click="Refresh_Click" IsEnabled="{x:Bind IsLoading.Value, Mode=OneWay, Converter={StaticResource NegateBooleanConverter}}">
+                        <Button Click="Refresh_Click" IsEnabled="{x:Bind IsLoading.Value, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}">
                             <Grid>
                                 <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="16" Height="16"></ProgressRing>
                                 <StackPanel Orientation="Horizontal" Spacing="8">
@@ -85,7 +85,7 @@
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1" Spacing="4">
-                                    <Button Content="Update" Style="{StaticResource AccentButtonStyle}" IsEnabled="{x:Bind IsHold, Converter={StaticResource NegateBooleanConverter}}"/>
+                                    <Button Content="Update" Style="{StaticResource AccentButtonStyle}" IsEnabled="{x:Bind IsHold, Converter={StaticResource BoolNegationConverter}}"/>
                                     <Button>
                                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE712;" FontSize="16" Margin="0,1"/>
 
