@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.30404.54
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "scoop-gui (Package)", "scoop-gui (Package)\scoop-gui (Package).wapproj", "{9B6C62C2-402F-4B76-8D73-F2F84C419EE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scoop-gui", "scoop-gui\scoop-gui.csproj", "{F0ECFE23-CEE5-4D62-B07C-B85B1C109599}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "scoop-gui", "scoop-gui\scoop-gui.csproj", "{F0ECFE23-CEE5-4D62-B07C-B85B1C109599}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DAE11343-DA79-4E1F-B582-E31129079587}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

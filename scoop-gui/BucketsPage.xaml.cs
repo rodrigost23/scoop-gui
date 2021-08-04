@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using PropertyChanged.SourceGenerator;
 using ScoopGui.Models;
 using ScoopGui.Util;
 using System;
@@ -17,7 +18,13 @@ namespace ScoopGui
     {
         public ObservableCollection<ScoopBucket> BucketsList => state.BucketsList;
 
+        public ObservableCollection<ScoopBucket> BucketsKnown => state.BucketsKnown;
+
+        public AddBucketPoco AddBucket { get; }
+
         public ObservableObject<bool> IsLoading { get; } = false;
+
+        public ObservableObject<bool> IsLoadingKnown { get; } = false;
 
         protected override CommandList MenuItems => _menuItems;
 
@@ -30,26 +37,27 @@ namespace ScoopGui
         public BucketsPage()
         {
             InitializeComponent();
+
+            AddBucket = new(state);
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (BucketsList.Count == 0 && !IsLoading)
             {
-                await RefreshData();
+                RefreshData();
             }
         }
 
-        private async void Refresh_Click(object sender, RoutedEventArgs e)
+        private void Refresh_Click(object sender, RoutedEventArgs e)
         {
-            await RefreshData();
+            RefreshData();
         }
 
-        private async Task RefreshData()
+        private void RefreshData()
         {
             IsLoading.Value = true;
-
-            await Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 await foreach (ScoopBucket item in Scoop.BucketList())
                 {
@@ -72,9 +80,80 @@ namespace ScoopGui
                         }
                     });
                 }
+            }).ContinueWith((_task) =>
+            {
+                _ = DispatcherQueue.TryEnqueue(() =>
+                {
+                    IsLoading.Value = false;
+                });
             });
 
-            IsLoading.Value = false;
+            IsLoadingKnown.Value = true;
+            _ = Task.Run(async () =>
+              {
+                  await foreach (ScoopBucket item in Scoop.BucketKnown())
+                  {
+                      // Run in UI Thread
+                      _ = DispatcherQueue.TryEnqueue(() =>
+                        {
+                            int index = BucketsKnown.ToList().FindIndex(x => x.Name == item.Name);
+                            if (index <= -1)
+                            {
+                                index = BucketsKnown.ToList().FindIndex(x => string.Compare(x.Name, item.Name, StringComparison.OrdinalIgnoreCase) > 0);
+
+                                if (index > -1)
+                                {
+                                    BucketsKnown.Insert(index, item);
+                                }
+                                else
+                                {
+                                    BucketsKnown.Add(item);
+                                }
+                            }
+                        });
+                  }
+              }).ContinueWith((_task) =>
+              {
+                  _ = DispatcherQueue.TryEnqueue(() =>
+                  {
+                      IsLoadingKnown.Value = false;
+                  });
+              });
         }
+
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+            _ = AddDialog.ShowAsync();
+        }
+
+        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            sender.IsSuggestionListOpen = !sender.IsSuggestionListOpen;
+        }
+
+        //private void AutoSuggestBox_GotFocus(object sender, RoutedEventArgs e)
+        //{
+        //    (sender as AutoSuggestBox)!.IsSuggestionListOpen = true;
+        //}
+
+        //private void AutoSuggestBox_LostFocus(object sender, RoutedEventArgs e)
+        //{
+        //    (sender as AutoSuggestBox)!.IsSuggestionListOpen = false;
+        //}
+
+    }
+
+    public partial class AddBucketPoco
+    {
+        private readonly State state;
+
+        public AddBucketPoco(State state)
+        {
+            this.state = state;
+        }
+
+        [Notify] private string? _name;
+        [Notify] private string? _url;
+        public bool IsUrlEnabled => !state.BucketsKnown.Any(x => x.Name == Name);
     }
 }

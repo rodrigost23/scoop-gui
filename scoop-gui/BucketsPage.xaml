@@ -16,8 +16,6 @@
     </UserControl.Resources>
 
     <Grid>
-        <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
-
         <ScrollViewer>
             <StackPanel>
                 <Grid Margin="32,24">
@@ -32,9 +30,9 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
-                        <Button IsEnabled="{x:Bind IsLoading.Value, Mode=OneWay, Converter={StaticResource NegateBooleanConverter}}" Style="{StaticResource AccentButtonStyle}">
+                        <Button Click="Add_Click" IsEnabled="{x:Bind IsLoadingKnown.Value, Mode=OneWay, Converter={StaticResource NegateBooleanConverter}}" Style="{StaticResource AccentButtonStyle}">
                             <Grid>
-                                <ProgressRing IsActive="False" Width="16" Height="16"></ProgressRing>
+                                <ProgressRing IsActive="{x:Bind IsLoadingKnown.Value, Mode=OneWay}" Width="16" Height="16"></ProgressRing>
                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                     <TextBlock Text="Add" />
                                 </StackPanel>
@@ -78,5 +76,29 @@
 
             </StackPanel>
         </ScrollViewer>
+        <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
+        <ContentDialog
+            x:Name="AddDialog"
+    
+            Title="Add a new bucket"
+            PrimaryButtonText="Add"
+            CloseButtonText="Cancel"
+            DefaultButton="Primary">
+
+            <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Spacing="12">
+                <AutoSuggestBox
+                    ItemsSource="{x:Bind BucketsKnown}"
+                    DisplayMemberPath="Name"
+                    Header="Name"
+                    Text="{x:Bind AddBucket.Name}"
+                    QuerySubmitted="AutoSuggestBox_QuerySubmitted">
+                    <AutoSuggestBox.QueryIcon>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE70D;"/>
+                    </AutoSuggestBox.QueryIcon>
+                </AutoSuggestBox>
+                <TextBox Header="Repository URL" Text="{x:Bind AddBucket.Url}"/>
+            </StackPanel>
+
+        </ContentDialog>
     </Grid>
 </local:BasePage>

@@ -130,5 +130,14 @@ namespace ScoopGui
                 yield return new ScoopBucket(name: trimmed);
             }
         }
+
+        public static async IAsyncEnumerable<ScoopBucket> BucketKnown()
+        {
+            await foreach (string line in RunAsync("bucket known"))
+            {
+                string trimmed = line.Trim();
+                yield return new ScoopBucket(name: trimmed);
+            }
+        }
     }
 }
