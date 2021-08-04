@@ -43,7 +43,7 @@ namespace ScoopGui
         private void NavView_Loaded(object sender, RoutedEventArgs e)
         {
             // NavView doesn't load any page by default, so load home page.
-            NavView.SelectedItem = NavView.MenuItems[0];
+            //NavView.SelectedItem = NavView.MenuItems[0];
 
             // Add keyboard accelerators for backwards navigation.
             //var goBack = new KeyboardAccelerator { Key = Windows.System.VirtualKey.GoBack };

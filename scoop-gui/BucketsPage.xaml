@@ -7,6 +7,7 @@
     xmlns:local="using:ScoopGui"
     xmlns:models="using:ScoopGui.Models"
     xmlns:converters="using:CommunityToolkit.WinUI.UI.Converters"
+    xmlns:animations="using:CommunityToolkit.WinUI.UI.Animations"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled"
     Loaded="Page_Loaded">
@@ -99,7 +100,18 @@
                     x:Name="RepoTextBox"
                     Header="Repository URL"
                     Text="{x:Bind AddBucket.Url, Mode=TwoWay}"
-                    Visibility="{x:Bind AddBucket.IsUrlEnabled, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    Visibility="{x:Bind AddBucket.IsUrlEnabled, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                    <animations:Implicit.ShowAnimations>
+                        <animations:TranslationAnimation Duration="0:0:0.2" From="0, 10, 0" To="0"/>
+                        <animations:OpacityAnimation Duration="0:0:0.2" From="0" To="1.0"/>
+                    </animations:Implicit.ShowAnimations>
+
+                    <animations:Implicit.HideAnimations>
+                        <animations:TranslationAnimation Duration="0:0:0.2" From="0" To="0, 10,0"/>
+                        <animations:OpacityAnimation Duration="0:0:0.2" From="1" To="0.0"/>
+                    </animations:Implicit.HideAnimations>
+                </TextBox>
             </StackPanel>
 
         </ContentDialog>
