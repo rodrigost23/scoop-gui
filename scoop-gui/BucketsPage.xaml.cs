@@ -1,6 +1,8 @@
 ﻿#nullable enable
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Animation;
+using ObservableComputations;
 using PropertyChanged.SourceGenerator;
 using ScoopGui.Models;
 using ScoopGui.Util;
@@ -125,22 +127,6 @@ namespace ScoopGui
         {
             _ = AddDialog.ShowAsync();
         }
-
-        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            sender.IsSuggestionListOpen = !sender.IsSuggestionListOpen;
-        }
-
-        //private void AutoSuggestBox_GotFocus(object sender, RoutedEventArgs e)
-        //{
-        //    (sender as AutoSuggestBox)!.IsSuggestionListOpen = true;
-        //}
-
-        //private void AutoSuggestBox_LostFocus(object sender, RoutedEventArgs e)
-        //{
-        //    (sender as AutoSuggestBox)!.IsSuggestionListOpen = false;
-        //}
-
     }
 
     public partial class AddBucketPoco

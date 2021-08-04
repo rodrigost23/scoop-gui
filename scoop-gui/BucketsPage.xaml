@@ -13,6 +13,7 @@
 
     <UserControl.Resources>
         <util:NegateBooleanConverter x:Key="NegateBooleanConverter"/>
+        <util:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -79,24 +80,26 @@
         <ProgressRing IsActive="{x:Bind IsLoading.Value, Mode=OneWay}" Width="48" Height="48"></ProgressRing>
         <ContentDialog
             x:Name="AddDialog"
-    
             Title="Add a new bucket"
             PrimaryButtonText="Add"
             CloseButtonText="Cancel"
             DefaultButton="Primary">
 
             <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Spacing="12">
-                <AutoSuggestBox
-                    ItemsSource="{x:Bind BucketsKnown}"
-                    DisplayMemberPath="Name"
+                <ComboBox
+                    HorizontalAlignment="Stretch"
                     Header="Name"
-                    Text="{x:Bind AddBucket.Name}"
-                    QuerySubmitted="AutoSuggestBox_QuerySubmitted">
-                    <AutoSuggestBox.QueryIcon>
-                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE70D;"/>
-                    </AutoSuggestBox.QueryIcon>
-                </AutoSuggestBox>
-                <TextBox Header="Repository URL" Text="{x:Bind AddBucket.Url}"/>
+                    IsEditable="True"
+                    DisplayMemberPath="Name"
+                    SelectedValuePath="Name"
+                    ItemsSource="{x:Bind BucketsKnown, Mode=OneWay}"
+                    Text="{x:Bind AddBucket.Name, Mode=TwoWay}"/>
+
+                <TextBox
+                    x:Name="RepoTextBox"
+                    Header="Repository URL"
+                    Text="{x:Bind AddBucket.Url, Mode=TwoWay}"
+                    Visibility="{x:Bind AddBucket.IsUrlEnabled, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
             </StackPanel>
 
         </ContentDialog>
