@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows10.0.18362</TargetFramework>
-    <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
+    <TargetFramework>net5.0-windows10.0.19041</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>ScoopGui</RootNamespace>
 
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -13,61 +13,23 @@
     <UseWinUI>true</UseWinUI>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommunityToolkit.WinUI.UI" Version="7.0.3" />
-    <PackageReference Include="CommunityToolkit.WinUI.UI.Animations" Version="7.0.3" />
-    <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.1" />
+  <ItemGroup> 
+    <PackageReference Include="CommunityToolkit.WinUI.UI" Version="7.1.2" />
+    <PackageReference Include="CommunityToolkit.WinUI.UI.Animations" Version="7.1.2" />
     <PackageReference Include="Microsoft.VCRTForwarders.140" Version="1.0.7" />
-    <PackageReference Include="ObservableComputations" Version="2.2.0" />
-    <PackageReference Include="PropertyChanged.SourceGenerator" Version="1.0.0">
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
+    <PackageReference Include="ObservableComputations" Version="2.2.1" />
+    <PackageReference Include="PropertyChanged.SourceGenerator" Version="1.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.Linq" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Async" Version="5.0.0" />
+    <PackageReference Include="System.Linq.Async" Version="5.1.0" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
   <ItemGroup>
-    <FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" RuntimeFrameworkVersion="10.0.18362.16" />
-    <FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" TargetingPackVersion="10.0.18362.16" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="App.xaml" />
-    <None Remove="AppsListPage.xaml" />
-    <None Remove="BrowsePage.xaml" />
-    <None Remove="BucketsPage.xaml" />
-    <None Remove="ConsolePage.xaml" />
-    <None Remove="MainWindow.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="BucketsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="ConsolePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="BrowsePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="AppsListPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
 
   <ItemGroup>
