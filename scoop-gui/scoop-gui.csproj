@@ -11,7 +11,33 @@
     <RuntimeIdentifiers>win-x86;win-x64</RuntimeIdentifiers>
     <RuntimeIdentifier>win-$(Platform)</RuntimeIdentifier>
     <UseWinUI>true</UseWinUI>
+	<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
+    <PublishProfile>Properties\PublishProfiles\win10-$(Platform).pubxml</PublishProfile>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Images\LockScreenLogo.scale-200.png" />
+    <None Remove="Images\SplashScreen.scale-200.png" />
+    <None Remove="Images\Square150x150Logo.scale-200.png" />
+    <None Remove="Images\Square44x44Logo.scale-200.png" />
+    <None Remove="Images\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <None Remove="Images\StoreLogo.png" />
+    <None Remove="Images\Wide310x150Logo.scale-200.png" />
+    <None Remove="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\LockScreenLogo.scale-200.png" />
+    <Content Include="Images\SplashScreen.scale-200.png" />
+    <Content Include="Images\Square150x150Logo.scale-200.png" />
+    <Content Include="Images\Square44x44Logo.scale-200.png" />
+    <Content Include="Images\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Images\StoreLogo.png" />
+    <Content Include="Images\Wide310x150Logo.scale-200.png" />
+  </ItemGroup>
 
   <ItemGroup> 
     <PackageReference Include="CommunityToolkit.WinUI.UI" Version="7.1.2" />
